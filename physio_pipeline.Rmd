@@ -16,14 +16,14 @@ knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE, fig.align = 'cent
 ## Rationale and Pipeline Purpose
 The basic rationale for dedicating the time and energy into developing this pipeline started
 out as selfish: I found myself running the same code over and over again (i.e., breaking the
-archtyical coding "rule of three"). However, since its inception, bits and peices of this
+archtyical coding "rule of three"). However, since its inception, bits and pieces of this
 pipeline have turned into more general functions for use with collaborators (even a
 new package, [`fizzr`](https://github.com/d-bohn/fizzr)),
 and as a teaching mechanism (e.g., [various tutorials](https://d-bohn.github.io/tutorials/hrv_tutorial.html)).
 
 ### Some Caveats
 First, this is, arguably, not the *most* efficient way to pre-process,
-anaylze, and store data, but due to the nature of physiological data cleaning and analysis,
+analyze, and store data, but due to the nature of physiological data cleaning and analysis,
 it is useful to have files saved to the physical disk at each step, despite their
 large size.
 
@@ -60,7 +60,7 @@ sampling rate of 1000 Hz. The physiological measurements collected were:
 
   1) Electrocardiogram (EKG)
   
-  2) Cardiac Impedence
+  2) Cardiac Impedance
   
   3) Electrodermal Activity (GSR)
   
@@ -76,7 +76,7 @@ source(here("R/physio_functions_new.R"))
 ```
 
 ### A Note on Reproducibility
-Because the functions written for this pipeline are desgined for this specific
+Because the functions written for this pipeline are designed for this specific
 project, they are dependent on a certain file structure. All of the functions
 check to see if the appropriate folder/file is available, but in order to
 maximize reproducibility I include a function to create the file structure
@@ -103,9 +103,9 @@ The first thing to do is to extract the raw ECG and trigger data from the larger
 physio files that contain a number of electrophysiological recording channels
 that are unnecessary for this analysis (see above).
 
-I was able to ammend `data.table::fread` to read compressed
+I was able to amend `data.table::fread` to read compressed
 text files, as well as some inline "hacks" to output compressed text files.
-This significantly reduces the diskspace required for the project. Nonetheless,
+This significantly reduces the disk space required for the project. Nonetheless,
 even the compressed raw physio files exceed 1GB!
 
 ```{r data_extract, eval=FALSE}
@@ -170,7 +170,7 @@ purrr::walk(files3, write_ibi)
 
 ### Check and Graph Outliers
 This function attempts to detect IBI outliers. If it finds one, it removes the point and then 
-attempts to impute a datapoint via `forecast::tsclean`. It also saves a "before and after"
+attempts to impute a data point via `forecast::tsclean`. It also saves a "before and after"
 outlier analysis graph to the `plots` folder.
 
 ```{r graph_ibi, eval = FALSE}
@@ -180,10 +180,10 @@ purrr::walk(files4, outliers_ibi)
 ```
 
 ### Make Trigger Events
-Next, I have to extract the appropraite triggers from the raw data and coerce them
+Next, I have to extract the appropriate triggers from the raw data and coerce them
 into a format that is acceptable for downstream analysis and plotting (i.e., `RHRV`).
 
-The function saves the relevant triggers and timestamps to a compressed `.RData` file.
+The function saves the relevant triggers and time stamps to a compressed `.RData` file.
 
 ```{r make_triggers, eval = FALSE}
 files5 <- list.files(path = here("data/processed"), pattern = "*_trigger.csv.gz", full.names = TRUE)
@@ -194,7 +194,7 @@ purrr::walk(files5, make_events)
 ### Obtain HRV Statistics from Cleaned IBIs
 The first part of this code is just creating an empty dataframe to which the following function will
 append the analyzed HRV statistics. The batch command is a simple wrapper function calling upon
-the appropriate functions in the `RHRV` package. Specfically, it performs a spectral power band analysis, 
+the appropriate functions in the `RHRV` package. Specifically, it performs a spectral power band analysis, 
 extracts the relevant data (RSA for baseline and task), and appends that data to the dataframe
 created moments prior.
 
@@ -278,7 +278,7 @@ bx_rt <- bx %>%
 
 ### Check the Data and Save
 Lastly, we check the fidelity of our join by comparing the number of rows in our original
-dataframes to the number of rows in our joined dataset. If the join is considered
+data frames to the number of rows in our joined dataset. If the join is considered
 "perfectly joined", it will print a congratulatory message and save the dataset to the
 `data` folder in a compressed format for further analysis and visualization.
 
